@@ -6,6 +6,10 @@ User in this app is like a image (mapping) or middleware of origin user of shino
 
 And user can only access user_account in real shinobi_app via this app 's user
 
+* mydb:
+    + root_user : có quyền cấp phát mọi monitor user
+    + một user (khác root_user) chỉ được xem những monitor mà mình được cấp quyền
+
 monitor from shinobi
 {
     "mid": "p404",

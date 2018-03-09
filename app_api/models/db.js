@@ -8,3 +8,5 @@ mongoose.connection.on('disconnected', () => console.log(`disconnected from ${ur
 mongoose.connection.on('error', err => console.log(err));
 
 require('./Monitor');
+require('./User');
+require('./seed')
