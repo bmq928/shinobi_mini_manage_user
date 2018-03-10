@@ -5,13 +5,13 @@ const name = "User"
 
 
 const UserSchema = new Schema({
-    uid       : {type: String, require: true}, // user id from shinobi db, not $id from this db
-    mail      : {type: String, require: true},
-    password  : {type: String, require: true},
-    ke        : {type: String},  // 
-    detail    : String,
-    isRoot    : {type: Boolean, require: true},
-    alMonitors: {type: [String], default: []}  // allowed monitor to access(list monitor id of shinobi, not $id of this db)
+    shinobi_uid       : {type: String, require: true}, // user id from shinobi db, not $id from this db
+    mail              : {type: String, require: true},
+    password          : {type: String, require: true},
+    ke                : {type: String},  // 
+    detail            : String,
+    isRoot            : {type: Boolean, require: true},
+    alMonitors        : {type: [String], default: []}  // allowed monitor to access(list monitor id of shinobi, not $id of this db)
     // monitorOption       // not use right now
 })
 
@@ -67,7 +67,11 @@ const UserSchema = new Schema({
 // })
 
 UserSchema.methods.generateHash  = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(Math.random()))
-UserSchema.methods.validPassword = (password) => bcrypt.compareSync(this.password, password)
-UserSchema.methods.isRootUser    = ()         => this.isRoot
+UserSchema.methods.validPassword = function(password) {
+    console.log('inside valid pass')
+    console.log(this.password)
+    return bcrypt.compareSync(password, this.password)
+}
+UserSchema.methods.isRootUser    = () => this.isRoot
 mongoose.model(name, UserSchema)
 module.exports = mongoose.model(name)
