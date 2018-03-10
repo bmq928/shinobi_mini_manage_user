@@ -51,8 +51,8 @@ const userData = [
         ke                : 'uet',
         password          : 'userPass',
         detail            : 'common_user',
-        alMonitors        : monitorData.map(monitor => monitor.shinobi_mid)[0] ,
-        isRoot            : true
+        isRoot            : false,
+        alMonitors        : monitorData.map(monitor => monitor.shinobi_mid)[0]
         // monitorOption       // not use right now
     }
 ]
@@ -66,33 +66,20 @@ User.count(null, (err, count) => {
         //     else console.log(res);
         // })
         let { shinobi_uid, mail, ke, password, detail, alMonitors, isRoot } = u
-        let newUser = new User({ shinobi_uid, mail, password, detail, alMonitors })
-        newUser.shinobi_uid         = shinobi_uid
-        newUser.mail        = mail
-        newUser.ke          = ke
-        newUser.detail      = detail
-        newUser.alMonitors  = alMonitors
-        newUser.isRoot      = isRoot || false
-        newUser.password    = newUser.generateHash(password)
-
-        if(u.isRoot){
-            
-            console.log(`password: ${newUser.password}`)
-            
-            newUser.save(err => {
-                if(err ) console.error(err)
-            })
-        } else {
-            User.find({}, (err, users) => {
-                if(err) console.error(err)
-                else {
-                    users.push(newUser)
-
-                    users.save(err => console.log(err))
-                }                
-
-            })
-        }
+        console.log(mail)
+        console.log(isRoot)
+        let newUser = new User({ shinobi_uid, mail,isRoot, password, detail, alMonitors })
+        newUser.save(err => {
+            if(err ) console.error(err)
+        })
+        // newUser.shinobi_uid         = shinobi_uid
+        // newUser.mail        = mail
+        // newUser.ke          = ke
+        // newUser.detail      = detail
+        // newUser.alMonitors  = alMonitors
+        // newUser.isRoot      = isRoot || false
+        // newUser.password    = password
+        // newUser.password    = newUser.generateHash(password)
 
 
         

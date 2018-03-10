@@ -66,12 +66,34 @@ const UserSchema = new Schema({
     
 // })
 
-UserSchema.methods.generateHash  = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(Math.random()))
+UserSchema.pre('save', function(next) {
+    let user = this;
+    if(!user.password) return next();
+
+    bcrypt.genSalt((err, salt) => {
+        if(err) return next(err);
+        bcrypt.hash(user.password, salt, (error, hash) => {
+            if(error) return next(error); 
+
+            user.password = hash;
+            console.log(user.password)
+            next()
+        })
+    })
+
+    
+})
+
+UserSchema.methods.generateHash  = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(Math.random()))
+} 
 UserSchema.methods.validPassword = function(password) {
     console.log('inside valid pass')
     console.log(this.password)
     return bcrypt.compareSync(password, this.password)
 }
-UserSchema.methods.isRootUser    = () => this.isRoot
+UserSchema.methods.isRootUser    = function() {
+    return this.isRoot
+}
 mongoose.model(name, UserSchema)
 module.exports = mongoose.model(name)
