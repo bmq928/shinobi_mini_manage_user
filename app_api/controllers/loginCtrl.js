@@ -6,8 +6,8 @@ module.exports = (req, res) => {
     User.find({ mail }, (err, users) => {
         let user = users[0]
         //bind function to use
-        user.validPassword = user.validPassword.bind(user)
-        console.log(user.isRootUser())
+        // user.validPassword = user.validPassword.bind(user)
+        // console.log(user.isRootUser())
         if (err) {
             res.status(400).json('mail invalid')
         } else if (user.validPassword(password)) {

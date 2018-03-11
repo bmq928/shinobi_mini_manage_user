@@ -3,7 +3,7 @@ const Monitor = require('./Monitor')
 
 const monitorData = [
     {
-        shinobi_mid      : 'p404',
+        _id              : 'p404',
         ke               : 'uet',
         type             : 'type',
         ext              : 'ext',
@@ -18,7 +18,7 @@ const monitorData = [
         width            : 50,
         height           : 50
     },{      
-        shinobi_mid      : 'p405',
+        _id              : 'p405',
         ke               : 'ulis',
         name             : 'some_some_thing',
         details          : '',
@@ -37,7 +37,7 @@ const monitorData = [
 
 const userData = [
     {
-        shinobi_uid       : '1',
+        _id               : '1',
         mail              : 'admin@gmail.com',
         ke                : 'uet',
         password          : 'admin_password',
@@ -46,7 +46,7 @@ const userData = [
         isRoot            : true
         // monitorOption       // not use right now
     }, {
-        shinobi_uid       : '1',
+        _id               : '2',
         mail              : 'user@gmail.com',
         ke                : 'uet',
         password          : 'userPass',
@@ -65,10 +65,10 @@ User.count(null, (err, count) => {
         //     if(err) console.error(err);
         //     else console.log(res);
         // })
-        let { shinobi_uid, mail, ke, password, detail, alMonitors, isRoot } = u
+        let { _id, mail, ke, password, detail, alMonitors, isRoot } = u
         console.log(mail)
         console.log(isRoot)
-        let newUser = new User({ shinobi_uid, mail,isRoot, password, detail, alMonitors })
+        let newUser = new User({ _id, mail,isRoot, password, detail, alMonitors })
         newUser.save(err => {
             if(err ) console.error(err)
         })

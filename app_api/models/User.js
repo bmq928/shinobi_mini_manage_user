@@ -5,15 +5,15 @@ const name = "User"
 
 
 const UserSchema = new Schema({
-    shinobi_uid       : {type: String, require: true}, // user id from shinobi db, not $id from this db
-    mail              : {type: String, require: true},
-    password          : {type: String, require: true},
-    ke                : {type: String},  // 
-    detail            : String,
-    isRoot            : {type: Boolean, require: true},
-    alMonitors        : {type: [String], default: []}  // allowed monitor to access(list monitor id of shinobi, not $id of this db)
+    _id         : { type: String, require: true}, // user id from shinobi db, not $id from this db
+    mail        : { type: String, require: true },
+    password    : { type: String, require: true },
+    ke          : { type: String },  // 
+    detail      : String,
+    isRoot      : { type: Boolean, require: true },
+    alMonitors  : { type: [String], default: [] }  // allowed monitor to access(list monitor id of shinobi, not $id of this db)
     // monitorOption       // not use right now
-})
+}, { _id: false })
 
 
 // UserSchema.methods.setPassword = (password) => {
@@ -32,7 +32,7 @@ const UserSchema = new Schema({
 //                     console.log(`password: ${user.password}`)               
 //                 })
 //         })
-        
+
 // }
 
 // UserSchema.pre('save', next => {
@@ -63,17 +63,17 @@ const UserSchema = new Schema({
 //     //                 console.log(`password: ${user.password}`)               
 //     //             })
 //     //     })
-    
+
 // })
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
     let user = this;
-    if(!user.password) return next();
+    if (!user.password) return next();
 
     bcrypt.genSalt((err, salt) => {
-        if(err) return next(err);
+        if (err) return next(err);
         bcrypt.hash(user.password, salt, (error, hash) => {
-            if(error) return next(error); 
+            if (error) return next(error);
 
             user.password = hash;
             console.log(user.password)
@@ -81,18 +81,18 @@ UserSchema.pre('save', function(next) {
         })
     })
 
-    
+
 })
 
-UserSchema.methods.generateHash  = function(password) {
+UserSchema.methods.generateHash = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(Math.random()))
-} 
-UserSchema.methods.validPassword = function(password) {
+}
+UserSchema.methods.validPassword = function (password) {
     console.log('inside valid pass')
     console.log(this.password)
     return bcrypt.compareSync(password, this.password)
 }
-UserSchema.methods.isRootUser    = function() {
+UserSchema.methods.isRootUser = function () {
     return this.isRoot
 }
 mongoose.model(name, UserSchema)

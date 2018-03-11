@@ -3,7 +3,7 @@ const { Schema } = mongoose
 const name = 'Monitor'
 
 const MonitorSchema = new Schema({
-    shinobi_mid     : {type: String, required: true}, //monitor id from shinobi id, not $id from this db
+    _id             : {type: String, required: true}, 
     ke              : {type: String, required: true},
     name            : {type: String, required: true},
     // shto         : Array // i dont know what i means
