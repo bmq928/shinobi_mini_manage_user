@@ -42,7 +42,7 @@ const userData = [
         ke                : 'uet',
         password          : 'admin_password',
         detail            : 'root_user',
-        alMonitors        : monitorData.map(monitor => monitor.shinobi_mid),
+        alMonitors        : monitorData.map(monitor => monitor._id),
         isRoot            : true
         // monitorOption       // not use right now
     }, {
@@ -52,7 +52,7 @@ const userData = [
         password          : 'userPass',
         detail            : 'common_user',
         isRoot            : false,
-        alMonitors        : monitorData.map(monitor => monitor.shinobi_mid)[0]
+        alMonitors        : monitorData.map(monitor => monitor._id)[0]
         // monitorOption       // not use right now
     }
 ]

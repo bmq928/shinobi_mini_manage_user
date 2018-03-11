@@ -84,16 +84,25 @@ UserSchema.pre('save', function (next) {
 
 })
 
+//do not use any more
 UserSchema.methods.generateHash = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(Math.random()))
 }
-UserSchema.methods.validPassword = function (password) {
-    console.log('inside valid pass')
-    console.log(this.password)
-    return bcrypt.compareSync(password, this.password)
+UserSchema.methods.validPassword = function (password, callback) {
+    bcrypt
+        .compare(password, this.password, (err, same) =>{
+            if(err) callback(err, null)
+            else callback(null, same)
+        })
 }
 UserSchema.methods.isRootUser = function () {
     return this.isRoot
+}
+UserSchema.methods.addMonitor = function (mid) {
+    let alMonitors = this.alMonitors;
+
+    if(alMonitors.indexOf(mid) === -1) alMonitors.push(mid)
+    else throw new Error('this monitor have already allowed')
 }
 mongoose.model(name, UserSchema)
 module.exports = mongoose.model(name)
