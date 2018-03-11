@@ -17,9 +17,7 @@ const isRoot = (req, callback) => {
 //id of rootUser is from session
 module.exports.allocateMonitor = (req, res) => {
 
-
-    let uid = req.params.uid
-    let mid = req.params.mid
+    let { uid, mid } = req.params;
 
     isRoot(req, (err, rootUser) => {
         if (err) res.status(401).json(err)
@@ -91,7 +89,7 @@ module.exports.addUser = (req, res) => {
                 if (users.length > 0) {
                     return res.status(400).json({ message: 'email have been existed' })
                 }
-                
+
                 let newUser = new User({
                     _id: Date.now().toString(),
                     isRoot: false,
@@ -112,5 +110,24 @@ module.exports.addUser = (req, res) => {
 
 
 
+    })
+}
+
+//remove user
+module.exports.removeUserByMail = (req, res) => {
+    isRoot(req, (err, rootUser) => {
+        if (err) return res.status(401).json(err);
+
+        let { mail } = req.params
+
+        //check whether mail is root or not
+        if(mail === rootUser.mail) return res.status(400).json({message: 'cannot delete root user acc'})
+
+        User
+            .find({ mail })
+            .remove((err) => {
+                if (err) res.status(400).json(err)
+                else res.status(204).json({message: 'remove completed'})
+        })
     })
 }

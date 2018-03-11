@@ -11,5 +11,6 @@ route.post('/login', loginCtrl)
 
 route.put('/allocate-monitor/:uid/:mid', adminCtrl.allocateMonitor)
 route.post('/addUser', adminCtrl.addUser)
+route.delete('/removeUserByMail/:mail', adminCtrl.removeUserByMail)
 
 module.exports = route;
