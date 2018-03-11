@@ -28,11 +28,11 @@ module.exports = (req, res) => {
                 // res.status(500).json({message: 'internal error'});
                 res.status(500).json(p_err);
             }
-            if (same) {
+            else if (same) {
                 req.session._id = user._id
                 res.status(201).json({_id: user._id})
             }
-            if (!same) {
+            else {
                 res.status(400).json({message: 'password invalid'})
             }
 
