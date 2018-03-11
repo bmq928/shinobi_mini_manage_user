@@ -8,6 +8,8 @@ route.get('/', (req, res, next) => {
 })
 
 route.post('/login', loginCtrl)
+
 route.put('/allocate-monitor/:uid/:mid', adminCtrl.allocateMonitor)
+route.post('/addUser', adminCtrl.addUser)
 
 module.exports = route;

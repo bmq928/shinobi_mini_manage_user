@@ -1,7 +1,8 @@
 const User = require('../models/User');
 const Monitor = require('../models/Monitor');
-const isRoot = (id, callback) => {
+const isRoot = (req, callback) => {
     // console.log(id)
+    let id = req.session._id;
     if (!id) callback({ message: 'login required' })
     else User.findById(id, (err, rootUser) => {
         if (err) callback(err)
@@ -16,15 +17,11 @@ const isRoot = (id, callback) => {
 //id of rootUser is from session
 module.exports.allocateMonitor = (req, res) => {
 
-    let session = req.session;
-    let _id     = session._id
-    let uid     = req.params.uid
-    let mid     = req.params.mid
-    console.log(session)
-    console.log(`sessionId ${_id}`)
-    console.log(`mid ${mid}`)
 
-    isRoot(_id, (err, rootUser) => {
+    let uid = req.params.uid
+    let mid = req.params.mid
+
+    isRoot(req, (err, rootUser) => {
         if (err) res.status(401).json(err)
         else {
             // let findedUser, findedMonitor;
@@ -57,16 +54,63 @@ module.exports.allocateMonitor = (req, res) => {
                     user.save(err => {
                         console.log('from user.save')
                         console.error(err)
-                        if(err) res.status(500).json({ message: 'internal error' })
-                        res.status(200).json({message: 'monify success'})
+                        if (err) res.status(500).json({ message: 'internal error' })
+                        res.status(200).json({ message: 'monify success' })
                     })
                 })
                 .catch(err => {
                     console.log('from user.save.catch')
                     console.log(err);
-                    if(err) res.status(400).json({ message: err.toString() })
+                    if (err) res.status(400).json({ message: err.toString() })
                 })
         }
+
+    })
+}
+
+//add User
+//cannot know how to add user
+//just now use Date.now().toString() to make id
+//this will change in the future
+module.exports.addUser = (req, res) => {
+    isRoot(req, (err, rootUser) => {
+        if (err) return res.status(401).json(err);
+
+        let { mail, ke, password, detail } = req.body
+
+        //pre-condition
+        if (!mail) return res.status(400).json({ message: 'email required' })
+        if (!ke) return res.status(400).json({ message: 'ke required' })
+        if (!password) return res.status(400).json({ message: 'password required' })
+
+
+        //check if the email have been already existed
+        User
+            .find({ mail })
+            .exec((err, users) => {
+                if (users.length > 0) {
+                    return res.status(400).json({ message: 'email have been existed' })
+                }
+                
+                let newUser = new User({
+                    _id: Date.now().toString(),
+                    isRoot: false,
+                    alMonitors: [],
+                    mail, password, detail, ke
+                })
+                newUser.save(err => {
+                    if (err) {
+                        console.log('err from newUser.save from adminCtrl')
+                        console.error(err)
+                        res.status(400).json(err)
+                    } else {
+                        res.status(201).json({ message: 'create new user success' })
+                    }
+                })
+
+            })
+
+
 
     })
 }
