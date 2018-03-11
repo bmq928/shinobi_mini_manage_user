@@ -66,6 +66,40 @@ module.exports.allocateMonitor = (req, res) => {
     })
 }
 
+//unallocate monitor
+//id of monitor and user that is allocated is from req.body or param
+//id of rootUser is from session
+module.exports.unallocateMonitor = (req, res) => {
+    let { uid, mid } = req.params;
+
+    isRoot(req, (err, rootUser) => {
+        if (err) return res.status(401).json(err);
+        if (!uid) return res.status(400).json({ message: 'user id is required' });
+        if (!mid) return res.status(400).json({ message: 'monitor id is required' });
+        if(uid === rootUser._id) return res.status(400).json({ message: 'cannot unallocate from root-user' });
+
+        User.findById(uid, (err, user) => {
+            console.log(err)
+            if(err) return res.status(400).json(err)
+            if(!user) return res.status(400).json({message : 'id invalid'})
+
+            let index = user.alMonitors.indexOf(mid)
+
+            if (index === -1) res.status(400).json({ message: 'this user isnt even allow to use this monitor' })
+            else {
+                user.alMonitors.splice(index, 1);
+
+                user.save((err) => {
+                    console.log(err);
+                    if (err) res.status(400).json(err)
+                    else res.status(200).json({message: 'success to unallocated monitor'})
+                })
+            }
+
+        })
+    })
+}
+
 //add User
 //cannot know how to add user
 //just now use Date.now().toString() to make id
@@ -121,13 +155,13 @@ module.exports.removeUserByMail = (req, res) => {
         let { mail } = req.params
 
         //check whether mail is root or not
-        if(mail === rootUser.mail) return res.status(400).json({message: 'cannot delete root user acc'})
+        if (mail === rootUser.mail) return res.status(400).json({ message: 'cannot delete root user acc' })
 
         User
             .find({ mail })
             .remove((err) => {
                 if (err) res.status(400).json(err)
-                else res.status(204).json({message: 'remove completed'})
-        })
+                else res.status(204).json({ message: 'remove completed' })
+            })
     })
 }

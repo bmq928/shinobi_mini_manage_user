@@ -10,6 +10,7 @@ route.get('/', (req, res, next) => {
 route.post('/login', loginCtrl)
 
 route.put('/allocate-monitor/:uid/:mid', adminCtrl.allocateMonitor)
+route.put('/unallocate-monitor/:uid/:mid', adminCtrl.unallocateMonitor)
 route.post('/addUser', adminCtrl.addUser)
 route.delete('/removeUserByMail/:mail', adminCtrl.removeUserByMail)
 
