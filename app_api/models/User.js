@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose
 const bcrypt = require('bcrypt')
 const name = "User"
+const jwt = require('jsonwebtoken');
 
 
 const UserSchema = new Schema({
@@ -104,5 +105,18 @@ UserSchema.methods.addMonitor = function (mid) {
     if(alMonitors.indexOf(mid) === -1) alMonitors.push(mid)
     else throw new Error('this monitor have already allowed')
 }
+UserSchema.methods.generateJWT = function(){
+    const numDayExprire = 7;
+    let exp = new Date();
+    exp = exp.setDate(exp.getDate() + 7)
+
+    return jwt.sign({
+        // _id: this._id,
+        mail: this.mail,
+        isRoot: this.isRootUser(),
+        exp
+    }, process.env.JWT_SECRET)
+}
+
 mongoose.model(name, UserSchema)
 module.exports = mongoose.model(name)
