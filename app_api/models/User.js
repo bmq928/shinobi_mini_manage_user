@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 
 
 const UserSchema = new Schema({
-    _id         : { type: String, required: true}, // user id from shinobi db, not $id from this db
     mail        : { type: String, required: true },
     password    : { type: String, required: true },
     ke          : { type: String },  // 
@@ -15,7 +14,7 @@ const UserSchema = new Schema({
     alMonitors  : { type: [String], default: [] },  // allowed monitor to access(list monitor id of shinobi, not $id of this db)
     _hashAlready: { type: Boolean, default: false }
     // monitorOption       // not use right now
-}, { _id: false })
+})
 
 
 // UserSchema.methods.setPassword = (password) => {

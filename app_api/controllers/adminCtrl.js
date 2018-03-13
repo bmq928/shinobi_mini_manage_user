@@ -141,7 +141,6 @@ module.exports.addUser = (req, res) => {
                 }
 
                 let newUser = new User({
-                    _id: Date.now().toString(),
                     isRoot: false,
                     alMonitors: [],
                     mail, password, detail, ke

@@ -37,7 +37,6 @@ const monitorData = [
 
 const userData = [
     {
-        _id               : '1',
         mail              : 'admin@gmail.com',
         ke                : 'uet',
         password          : 'admin_password',
@@ -45,8 +44,7 @@ const userData = [
         alMonitors        : monitorData.map(monitor => monitor._id),
         isRoot            : true
         // monitorOption       // not use right now
-    }, {
-        _id               : '2',
+    }, {        
         mail              : 'user@gmail.com',
         ke                : 'uet',
         password          : 'userPass',
