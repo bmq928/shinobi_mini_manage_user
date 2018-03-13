@@ -6,13 +6,14 @@ const jwt = require('jsonwebtoken');
 
 
 const UserSchema = new Schema({
-    _id         : { type: String, require: true}, // user id from shinobi db, not $id from this db
-    mail        : { type: String, require: true },
-    password    : { type: String, require: true },
+    _id         : { type: String, required: true}, // user id from shinobi db, not $id from this db
+    mail        : { type: String, required: true },
+    password    : { type: String, required: true },
     ke          : { type: String },  // 
     detail      : String,
-    isRoot      : { type: Boolean, require: true },
-    alMonitors  : { type: [String], default: [] }  // allowed monitor to access(list monitor id of shinobi, not $id of this db)
+    isRoot      : { type: Boolean, required: true },
+    alMonitors  : { type: [String], default: [] },  // allowed monitor to access(list monitor id of shinobi, not $id of this db)
+    _hashAlready: { type: Boolean, default: false }
     // monitorOption       // not use right now
 }, { _id: false })
 
@@ -70,14 +71,16 @@ const UserSchema = new Schema({
 UserSchema.pre('save', function (next) {
     let user = this;
     if (!user.password) return next();
+    if(user._hashAlready) return next()
 
+    
     bcrypt.genSalt((err, salt) => {
         if (err) return next(err);
         bcrypt.hash(user.password, salt, (error, hash) => {
             if (error) return next(error);
 
             user.password = hash;
-            console.log(user.password)
+            user._hashAlready = true;
             next()
         })
     })
