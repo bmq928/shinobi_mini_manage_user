@@ -168,10 +168,14 @@
                 var token = $('#allocateMonitor-token').val()
 
                 $.ajax({
-                    url: domain + 'allocate-monitor/' + uid + "/" + mid,
+                    url: domain + 'allocate-monitor/',
                     type: 'put',
                     headers: {
                         Authorization: 'Bearer ' + token
+                    },
+                    data: {
+                        uid: uid,
+                        mid: mid
                     },
                     success: function (data, status) {
                         console.log('post')
@@ -194,10 +198,13 @@
                 var token = $('#unallocateMonitor-token').val()
 
                 $.ajax({
-                    url: domain + 'unallocate-monitor/' + uid + "/" + mid,
+                    url: domain + 'unallocate-monitor/',
                     type: 'put',
                     headers: {
                         Authorization: 'Bearer ' + token
+                    },data: {
+                        uid: uid,
+                        mid: mid
                     },
                     success: function (data, status) {
                         console.log('post')
@@ -256,10 +263,13 @@
                 var token = $('#removeUserByMail-token').val();
                 
                 $.ajax({
-                    url: domain + 'removeUserByMail/' + mail,
+                    url: domain + 'removeUserByMail',
                     type: 'delete',
                     headers: {
                         Authorization: 'Bearer ' + token
+                    },
+                    data: {
+                        mail: mail
                     },
                     success: function (data, status) {
                         console.log('post')

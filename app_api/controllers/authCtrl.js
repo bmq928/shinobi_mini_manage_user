@@ -4,6 +4,8 @@ let passport = require('passport')
 module.exports.login = (req, res) => {
     let { mail, password } = req.body;
     console.log(req.session)
+    if(!mail) return res.status(400).json({message: 'mail is required'})
+    if(!password) return res.status(400).json({message: 'password is required'})
 
     // User.find({ mail }, (err, users) => {
     //     let user = users[0]

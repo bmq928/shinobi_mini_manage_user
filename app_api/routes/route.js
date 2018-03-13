@@ -15,9 +15,9 @@ route.get('/', (req, res, next) => {
 route.post('/login', authCtrl.login)
 route.get('/logout', authCtrl.logout)
 
-route.put('/allocate-monitor/:uid/:mid',authMid, adminCtrl.allocateMonitor)
-route.put('/unallocate-monitor/:uid/:mid',authMid, adminCtrl.unallocateMonitor)
+route.put('/allocate-monitor',authMid, adminCtrl.allocateMonitor)
+route.put('/unallocate-monitor',authMid, adminCtrl.unallocateMonitor)
 route.post('/addUser',authMid, adminCtrl.addUser)
-route.delete('/removeUserByMail/:mail',authMid, adminCtrl.removeUserByMail)
+route.delete('/removeUserByMail',authMid, adminCtrl.removeUserByMail)
 
 module.exports = route;

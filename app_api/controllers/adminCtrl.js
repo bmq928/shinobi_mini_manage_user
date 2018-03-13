@@ -26,7 +26,10 @@ const isRoot = (req, callback) => {
 //id of rootUser is from session
 module.exports.allocateMonitor = (req, res) => {
 
-    let { uid, mid } = req.params;
+    let { uid, mid } = req.body;
+    if(!uid) res.status(400).json({message: 'user id is required'})
+    if(!mid) res.status(400).json({message: 'monitor id is required'})
+
     isRoot(req, (err, rootUser) => {
         if (err) res.status(401).json(err)
         else {
@@ -78,7 +81,12 @@ module.exports.allocateMonitor = (req, res) => {
 //id of monitor and user that is allocated is from req.body or param
 //id of rootUser is from session
 module.exports.unallocateMonitor = (req, res) => {
-    let { uid, mid } = req.params;
+    let { uid, mid } = req.body;
+    if(!uid) console.log('uid')
+    console.log(mid)
+    
+    if(!uid) res.status(400).json({message: 'user id is required'})
+    if(!mid) res.status(400).json({message: 'monitor id is required'})
 
     isRoot(req, (err, rootUser) => {
         if (err) return res.status(401).json(err);
@@ -160,7 +168,8 @@ module.exports.removeUserByMail = (req, res) => {
     isRoot(req, (err, rootUser) => {
         if (err) return res.status(401).json(err);
 
-        let { mail } = req.params
+        let { mail } = req.body
+        if(!mail) res.status(400).json({message: 'mail is required'})
 
         //check whether mail is root or not
         if (mail === rootUser.mail) return res.status(400).json({ message: 'cannot delete root user acc' })
