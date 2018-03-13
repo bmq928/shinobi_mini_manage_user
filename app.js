@@ -19,6 +19,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'app_client')))
 app.use(session({
   secret            : process.env.SECRET || 'SOME_SECRET',
   saveUninitialized : false, //force a session to be saved
@@ -28,6 +29,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/api', apiRouter);
+
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, 'app_client', 'index.html'))
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
