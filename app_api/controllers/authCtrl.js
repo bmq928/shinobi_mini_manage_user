@@ -58,7 +58,7 @@ module.exports.login = (req, res) => {
 
 }
 
-module.exports.logout = (req, res) => {
-    req.session = null;
-    res.status(200).send('logout')
-}
+// module.exports.logout = (req, res) => {
+//     req.session = null;
+//     res.status(200).send('logout')
+// }

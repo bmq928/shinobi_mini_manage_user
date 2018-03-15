@@ -35,7 +35,16 @@
         <button id="logout-btn" >Logout</button>    
     </form>
     
+    <!--====================== all monitor of the current user =======================-->
+    <h1>all monitor of the current user</h1>
+    <span id="all-monitor-err" class="err"></span>
+    <div>
+        <ul id="cur-user-list-monitor">
+            
+        </ul>
 
+        <button id="show-monitors">Show all</button>
+    </div>
 
     <!--======================== allocateMonitor ==========================-->
     <h1>allocateMonitor</h1>
@@ -106,6 +115,20 @@
         <button id="submit_adduser" type="submit">Submit</button>
     </form>
 
+    <!--======================= alMonitorByMail ================================-->
+    <h1>alMonitorByMail</h1>
+    <span id="alMonitorByMail-err" class="err"></span>
+    <form class="row" id="alMonitorByMail">
+        <div class="input-field col s6">
+            <input id="alMonitorByMail-mail" type="text" class="validate">
+            <label for="alMonitorByMail-mail">Mail</label>
+        </div>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    <ul id="alMonitorByMail-ul"> 
+        
+    </ul>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>

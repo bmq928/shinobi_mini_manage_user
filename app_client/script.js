@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     var domain = 'http://localhost:3000/api/'
 
-    function jsonfyErr(err) {return err.responseJSON}
+    function jsonfyErr(err) { return err.responseJSON }
     //login
     $('#login').on('submit', function (e) {
         e.preventDefault();
@@ -17,7 +17,7 @@ $(document).ready(function () {
                 password: password
             },
             success: function (data, status) {
-                
+
                 console.log(data);
                 localStorage['jwt-token'] = data.token;
                 $('#login-err').html('success');
@@ -31,10 +31,35 @@ $(document).ready(function () {
     })
 
     //logout
-    $('#logout-btn').on('click', function(e){
+    $('#logout-btn').on('click', function (e) {
         e.preventDefault();
-        if(localStorage.getItem['jwt-token']) localStorage.removeItem("jwt-token")
+        if (localStorage.getItem('jwt-token')) localStorage.removeItem("jwt-token")
         $('#login-err').html('logout success');
+    })
+
+    //list all monitors of current user
+    $('#show-monitors').on('click', function () {
+        var token = localStorage.getItem('jwt-token')
+
+        $.ajax({
+            url: domain + 'getAllMonitors',
+            type: 'get',
+            headers: {
+                Authorization: 'Bearer ' + token
+            },
+            success: function (data, status) {
+                var mids = data.alMonitors;
+                var $ul = $('#cur-user-list-monitor');
+                mids.forEach(mid => {
+                    $ul.append('<li>' + mid + '</li>');
+                })
+                $('#all-monitor-err').html('');
+            },
+            error: function (err) {
+                err = jsonfyErr(err);
+                $('#all-monitor-err').html(err.message);
+            }
+        })
     })
 
     //allocateMonitor
@@ -80,7 +105,7 @@ $(document).ready(function () {
             type: 'put',
             headers: {
                 Authorization: 'Bearer ' + token
-            },data: {
+            }, data: {
                 uid: uid,
                 mid: mid
             },
@@ -99,7 +124,7 @@ $(document).ready(function () {
     })
 
     //adduser
-    $('#adduser').on('submit', function(e){
+    $('#adduser').on('submit', function (e) {
         e.preventDefault();
 
         var mail = $('#adduser-mail').val()
@@ -107,7 +132,7 @@ $(document).ready(function () {
         var password = $('#adduser-pass').val()
         var detail = $('#adduser-detail').val()
         var token = localStorage.getItem('jwt-token')
-        
+
         $.ajax({
             url: domain + 'addUser',
             type: 'post',
@@ -136,12 +161,12 @@ $(document).ready(function () {
     })
 
     //removeUserByMail
-    $('#removeUserByMail').on('submit', function(e){
+    $('#removeUserByMail').on('submit', function (e) {
         e.preventDefault();
 
         var mail = $('#removeUserByMail-mail').val();
         var token = localStorage.getItem('jwt-token')
-        
+
         $.ajax({
             url: domain + 'removeUserByMail',
             type: 'delete',
@@ -160,10 +185,39 @@ $(document).ready(function () {
                 console.error(err)
                 err = jsonfyErr(err)
                 $('#removeUserByMail-err').html(err.message)
-                
+
             }
         })
 
     })
-    
+
+    $('#alMonitorByMail').on('submit', function (e) {
+        e.preventDefault();
+
+        var mail = $('#alMonitorByMail-mail').val()
+        var token = localStorage.getItem('jwt-token')
+
+        $.ajax({
+            url: domain + 'alMonitorsByMail/?mail=' + mail,
+            headers: {
+                Authorization: 'Bearer ' + token
+            },
+            type: 'get',
+            success: function (data, status) {
+                var $ul = $('#alMonitorByMail-ul')
+                var { alMonitors } = data
+
+                alMonitors.forEach(m => {
+                    $ul.append('<li>' + m + '</li>')
+                })
+                $('#alMonitorByMail-err').html('')
+            },
+            error: function(err){
+                console.log(err)
+                err = jsonfyErr(err)
+                $('#alMonitorByMail-err').html(err.message)
+            }
+        })
+    })
+
 })
