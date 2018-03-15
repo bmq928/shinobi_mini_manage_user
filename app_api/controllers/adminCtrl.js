@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const Monitor = require('../models/Monitor');
 const isRoot = (req, callback) => {
-    
+
     // console.log(req.payload)
     // console.log('inside is root')
     // let id = 'lfkasjd'
@@ -14,10 +14,10 @@ const isRoot = (req, callback) => {
     // });
 
     let rootUser = req.payload
-    let {mail, isRoot} = rootUser
+    let { mail, isRoot } = rootUser
 
-    if(!rootUser || !mail) callback({ message: 'login required' })
-    else if(!isRoot) callback({ message: 'root user only' }, null)
+    if (!rootUser || !mail) callback({ message: 'login required' })
+    else if (!isRoot) callback({ message: 'root user only' }, null)
     else callback(null, rootUser)
 }
 
@@ -27,8 +27,8 @@ const isRoot = (req, callback) => {
 module.exports.allocateMonitor = (req, res) => {
 
     let { uid, mid } = req.body;
-    if(!uid) res.status(400).json({message: 'user id is required'})
-    if(!mid) res.status(400).json({message: 'monitor id is required'})
+    if (!uid) res.status(400).json({ message: 'user id is required' })
+    if (!mid) res.status(400).json({ message: 'monitor id is required' })
 
     isRoot(req, (err, rootUser) => {
         if (err) res.status(401).json(err)
@@ -82,22 +82,22 @@ module.exports.allocateMonitor = (req, res) => {
 //id of rootUser is from session
 module.exports.unallocateMonitor = (req, res) => {
     let { uid, mid } = req.body;
-    if(!uid) console.log('uid')
+    if (!uid) console.log('uid')
     console.log(mid)
-    
-    if(!uid) res.status(400).json({message: 'user id is required'})
-    if(!mid) res.status(400).json({message: 'monitor id is required'})
+
+    if (!uid) res.status(400).json({ message: 'user id is required' })
+    if (!mid) res.status(400).json({ message: 'monitor id is required' })
 
     isRoot(req, (err, rootUser) => {
         if (err) return res.status(401).json(err);
         if (!uid) return res.status(400).json({ message: 'user id is required' });
         if (!mid) return res.status(400).json({ message: 'monitor id is required' });
-        if(uid === rootUser._id) return res.status(400).json({ message: 'cannot unallocate from root-user' });
+        if (uid === rootUser._id) return res.status(400).json({ message: 'cannot unallocate from root-user' });
 
         User.findById(uid, (err, user) => {
             console.log(err)
-            if(err) return res.status(400).json(err)
-            if(!user) return res.status(400).json({message : 'id invalid'})
+            if (err) return res.status(400).json(err)
+            if (!user) return res.status(400).json({ message: 'id invalid' })
 
             let index = user.alMonitors.indexOf(mid)
 
@@ -108,7 +108,7 @@ module.exports.unallocateMonitor = (req, res) => {
                 user.save((err) => {
                     console.log(err);
                     if (err) res.status(400).json(err)
-                    else res.status(200).json({message: 'success to unallocated monitor'})
+                    else res.status(200).json({ message: 'success to unallocated monitor' })
                 })
             }
 
@@ -168,16 +168,30 @@ module.exports.removeUserByMail = (req, res) => {
         if (err) return res.status(401).json(err);
 
         let { mail } = req.body
-        if(!mail) res.status(400).json({message: 'mail is required'})
+        if (!mail) return res.status(400).json({ message: 'mail is required' })
 
         //check whether mail is root or not
         if (mail === rootUser.mail) return res.status(400).json({ message: 'cannot delete root user acc' })
 
+        // User
+        //     .findOne({ mail }, (err, user) =>{
+        //         if(err) if (err) return res.status(400).json(err)
+        //         if(!user) return res.status(400).json({message: 'invalid mail'})
+        //         user.remove
+        //     })
+        //     .remove((err) => {
+        //         if (err) return res.status(400).json(err)
+        //         else return res.status(200).json({ message: 'remove completed' })
+        //     })
+
         User
-            .find({ mail })
-            .remove((err) => {
-                if (err) res.status(400).json(err)
-                else res.status(204).json({ message: 'remove completed' })
+            .findOne({ mail })
+            .remove()
+            .exec((err, numRemove) => {
+                console.log(numRemove)
+                if (err) return res.status(400).json(err)
+                if(!numRemove.n) return res.status(400).json({message: 'mail invalid'})
+                return res.status(200).json({ message: 'remove completed' })
             })
     })
 }

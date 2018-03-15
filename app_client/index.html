@@ -8,12 +8,18 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <title>Document</title>
+    <style>
+        .err{
+            color: red;
+        }
+    </style>
 </head>
 
 <body class="container">
 
     <!--============== Login ===========-->
     <h1>Login</h1>
+    <span id="login-err" class="err"></span>
     <form id="login">
         <div class="row">
             <div class="input-field col s6">
@@ -25,15 +31,15 @@
                 <label for="password">Password</label>
             </div>
         </div>
-        <div class="input-field col s12">
-            <textarea id="jwt-token" class="materialize-textarea"></textarea>
-        </div>
-        <button id="submit_login" type="submit">Login</button>
+        <button type="submit">Login</button>
+        <button id="logout-btn" >Logout</button>    
     </form>
+    
 
 
     <!--======================== allocateMonitor ==========================-->
     <h1>allocateMonitor</h1>
+    <span id="allocateMonitor-err" class="err"></span>
     <form class="row" id="allocateMonitor">
         <div class="input-field col s4">
             <input id="allocateMonitor-uid" type="text" class="validate">
@@ -42,20 +48,14 @@
         <div class="input-field col s4">
             <input id="allocateMonitor-mid" type="text" class="validate">
             <label for="allocateMonitor-mid">MonitorId</label>
-        </div>
-        <div class="input-field col s4">
-            <input id="allocateMonitor-token" type="text" class="validate">
-            <label for="allocateMonitor-token">Token</label>
-        </div>
-        <div class="input-field col s12">
-            <textarea id="allocateMonitor-msg" class="materialize-textarea"></textarea>
-        </div>
+        </div><br>
         <button id="submit_allocateMonitor" type="submit">Submit</button>
     </form>
 
 
     <!--======================== unallocateMonitor ==========================-->
     <h1>unallocateMonitor</h1>
+    <span id="unallocateMonitor-err" class="err"></span>
     <form class="row" id="unallocateMonitor">
         <div class="input-field col s4">
             <input id="unallocateMonitor-uid" type="text" class="validate">
@@ -65,18 +65,13 @@
             <input id="unallocateMonitor-mid" type="text" class="validate">
             <label for="unallocateMonitor-mid">MonitorId</label>
         </div>
-        <div class="input-field col s4">
-            <input id="unallocateMonitor-token" type="text" class="validate">
-            <label for="unallocateMonitor-token">Token</label>
-        </div>
-        <div class="input-field col s12">
-            <textarea id="unallocateMonitor-msg" class="materialize-textarea"></textarea>
-        </div>
+        <br>
         <button id="submit_unallocateMonitor" type="submit">Submit</button>
     </form>
 
     <!--========================= adduser ==============================-->
     <h1>add user</h1>
+    <span id="adduser-err" class="err"></span>
     <form class="row" id="adduser">
         <div class="input-field col s3">
             <input id="adduser-mail" type="text" class="validate">
@@ -94,33 +89,20 @@
             <input id="adduser-detail" type="text" class="validate">
             <label for="adduser-detail">Detail</label>
         </div>
-        <div class="input-field col s4">
-            <input id="adduser-token" type="text" class="validate">
-            <label for="adduser-token">Token</label>
-        </div>
-        <div class="input-field col s12">
-            <textarea id="adduser-msg" class="materialize-textarea"></textarea>
-
-        </div>
+        <br>
         <button id="submit_adduser" type="submit">Submit</button>
     </form>
 
 
     <!--===================== removeUserByMail ===========================-->
     <h1>removeUserByMail</h1>
+    <span id="removeUserByMail-err" class="err"></span>
     <form class="row" id="removeUserByMail">
         <div class="input-field col s6">
             <input id="removeUserByMail-mail" type="text" class="validate">
             <label for="removeUserByMail-mail">Mail</label>
         </div>
-        <div class="input-field col s6">
-            <input id="removeUserByMail-token" type="text" class="validate">
-            <label for="removeUserByMail-token">Token</label>
-        </div>
-
-        <div class="input-field col s12">
-            <textarea id="adduser-msg" class="materialize-textarea"></textarea>
-        </div>
+        <br>
         <button id="submit_adduser" type="submit">Submit</button>
     </form>
 
@@ -128,165 +110,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-    <script>
-
-        $(document).ready(function () {
-
-            var domain = 'http://localhost:3000/api/'
-
-            //login
-            $('#login').on('submit', function (e) {
-                e.preventDefault();
-                var mail = $('#mail').val();
-                var password = $('#password').val();
-
-                $.ajax({
-                    url: domain + 'login',
-                    type: 'post',
-                    data: {
-                        mail: mail,
-                        password: password
-                    },
-                    success: function (data, status) {
-                        console.log('post')
-                        console.log(data)
-                        $('#jwt-token').val(data)
-                    },
-                    error: function (err) {
-                        console.error(err)
-                    }
-                })
-
-
-            })
-
-            //allocateMonitor
-            $('#allocateMonitor').on('submit', function (e) {
-                e.preventDefault();
-                var uid = $('#allocateMonitor-uid').val()
-                var mid = $('#allocateMonitor-mid').val()
-                var token = $('#allocateMonitor-token').val()
-
-                $.ajax({
-                    url: domain + 'allocate-monitor/',
-                    type: 'put',
-                    headers: {
-                        Authorization: 'Bearer ' + token
-                    },
-                    data: {
-                        uid: uid,
-                        mid: mid
-                    },
-                    success: function (data, status) {
-                        console.log('post')
-                        console.log(data)
-                        $('#allocate-msg').val(data)
-                    },
-                    error: function (err) {
-                        console.error(err)
-                        $('#allocate-msg').val(err)
-                    }
-                })
-
-            })
-
-            //unallocateMonitor
-            $('#unallocateMonitor').on('submit', function (e) {
-                e.preventDefault();
-                var uid = $('#unallocateMonitor-uid').val()
-                var mid = $('#unallocateMonitor-mid').val()
-                var token = $('#unallocateMonitor-token').val()
-
-                $.ajax({
-                    url: domain + 'unallocate-monitor/',
-                    type: 'put',
-                    headers: {
-                        Authorization: 'Bearer ' + token
-                    },data: {
-                        uid: uid,
-                        mid: mid
-                    },
-                    success: function (data, status) {
-                        console.log('post')
-                        console.log(data)
-                        $('#unallocateMonitor-msg').val(data)
-                    },
-                    error: function (err) {
-                        console.error(err)
-                        $('#unallocateMonitor-msg').val(err)
-                    }
-                })
-
-            })
-
-            //adduser
-            $('#adduser').on('submit', function(e){
-                e.preventDefault();
-
-                var mail = $('#adduser-mail').val()
-                var ke = $('#adduser-ke').val()
-                var password = $('#adduser-pass').val()
-                var detail = $('#adduser-detail').val()
-                var token = $('#adduser-token').val()
-                
-                $.ajax({
-                    url: domain + 'addUser',
-                    type: 'post',
-                    headers: {
-                        Authorization: 'Bearer ' + token
-                    },
-                    data: {
-                        mail: mail,
-                        password: password,
-                        ke: ke,
-                        detail: detail,
-                    },
-                    success: function (data, status) {
-                        console.log('post')
-                        console.log(data)
-                        $('#adduser-msg').val(data)
-                    },
-                    error: function (err) {
-                        console.error(err)
-                        $('#adduser-msg').val(err)
-                    }
-                })
-
-
-            })
-
-            //removeUserByMail
-            $('#removeUserByMail').on('submit', function(e){
-                e.preventDefault();
-
-                var mail = $('#removeUserByMail-mail').val();
-                var token = $('#removeUserByMail-token').val();
-                
-                $.ajax({
-                    url: domain + 'removeUserByMail',
-                    type: 'delete',
-                    headers: {
-                        Authorization: 'Bearer ' + token
-                    },
-                    data: {
-                        mail: mail
-                    },
-                    success: function (data, status) {
-                        console.log('post')
-                        console.log(data) // not show the data perhaps because of the default of delete method
-                        $('#adduser-msg').val(data)
-                    },
-                    error: function (err) {
-                        console.error(err)
-                        $('#adduser-msg').val(err)
-                    }
-                })
-
-            })
-            
-        })
-        
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
