@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <title>Document</title>
     <style>
-        .err{
+        .err {
             color: red;
         }
     </style>
@@ -32,18 +32,29 @@
             </div>
         </div>
         <button type="submit">Login</button>
-        <button id="logout-btn" >Logout</button>    
+        <button id="logout-btn">Logout</button>
     </form>
-    
+
     <!--====================== all monitor of the current user =======================-->
     <h1>all monitor of the current user</h1>
     <span id="all-monitor-err" class="err"></span>
     <div>
         <ul id="cur-user-list-monitor">
-            
+
         </ul>
 
         <button id="show-monitors">Show all</button>
+    </div>
+
+    <!--====================== all stream of the current user =======================-->
+    <h1>all stream of the current user</h1>
+    <span id="all-monitor-stream-err" class="err"></span>
+    <div>
+        <ul id="cur-user-list-monitor-stream">
+
+        </ul>
+
+        <button id="show-monitors-stream">Show all</button>
     </div>
 
     <!--======================== allocateMonitor ==========================-->
@@ -57,7 +68,8 @@
         <div class="input-field col s4">
             <input id="allocateMonitor-mid" type="text" class="validate">
             <label for="allocateMonitor-mid">MonitorId</label>
-        </div><br>
+        </div>
+        <br>
         <button id="submit_allocateMonitor" type="submit">Submit</button>
     </form>
 
@@ -126,8 +138,8 @@
         <br>
         <button type="submit">Submit</button>
     </form>
-    <ul id="alMonitorByMail-ul"> 
-        
+    <ul id="alMonitorByMail-ul">
+
     </ul>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="

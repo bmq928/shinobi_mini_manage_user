@@ -62,6 +62,31 @@ $(document).ready(function () {
         })
     })
 
+    //list all streams of current user
+    $('#show-monitors-stream').on('click', function(){
+        var token = localStorage.getItem('jwt-token')
+
+        $.ajax({
+            url: domain + 'getAllMonitorStreamByMail',
+            type: 'get',
+            headers: {
+                Authorization: 'Bearer ' + token
+            },
+            success: function (data, status) {
+                var mids = data.links;
+                var $ul = $('#cur-user-list-monitor-stream');
+                mids.forEach(link => {
+                    $ul.append('<li><iframe src="' + link + '"></iframe></li>');
+                })
+                $('#all-monitor-err').html('');
+            },
+            error: function (err) {
+                err = jsonfyErr(err);
+                $('#all-monitor-stream-err').html(err.message);
+            }
+        })
+    })
+
     //allocateMonitor
     $('#allocateMonitor').on('submit', function (e) {
         e.preventDefault();
